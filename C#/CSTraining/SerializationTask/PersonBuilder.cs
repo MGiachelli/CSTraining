@@ -8,51 +8,59 @@ namespace SerializationTask
 {
     public class PersonBuilder
     {
-        private Person _person;
+        private Person? _person;
+        private HumanBuilder? _humanBuilder;
 
-        protected Person Person 
+        public virtual Person Person 
         { 
             get { _person ??= new Person(); return _person; } 
+            set { _person = value; }
         }
-        
-        public Person BuildPerson(Object? FromObject = null)
+        public virtual PersonBuilder SetPerson(Person? person = null)
         {
+            this._person = person;
+            return this;
+        }
+        public virtual HumanBuilder HumanBuilder
+        {
+            get { _humanBuilder ??= new HumanBuilder(); return _humanBuilder; }
+            set { _humanBuilder = value; }
+        }
+        public virtual PersonBuilder SetHumanBuilder(HumanBuilder? humanBuilder = null)
+        {
+            this._humanBuilder = humanBuilder;
+            return this;
+        }
+        public Person Build(Object? FromObject = null)
+        {
+            this.HumanBuilder.Human = this.Person;
+            this.HumanBuilder.Build(FromObject);
+
             SetTransportId();
-            SetFirstName();
-            SetLastName();
-            SetAge();
-            SetGender();
-            SetBirthDate();
             SetSalary();
-            SetIsMarred();
+            SetIsMarried();
             SetChildren();
             SetCreditCardNumbers();
             
-            return Person;
+            return this.Person;
         }
 
-        protected void SetTransportId(Guid? guid = null) 
+        protected virtual void SetTransportId(Guid? guid = null) 
         { 
             if (guid == null) Person.TransportId = Guid.NewGuid();
             else Person.TransportId = (Guid) guid; 
         }
-        protected void SetFirstName (String? name = null) { Person.FirstName = name;}
-        protected void SetLastName(String? name = null) { Person.LastName = name; }
-        protected void SetSequenceId(Int32 id = 0) { Person.SequenceId = id; }
-        protected void SetCreditCardNumbers(String[]? cards = null) { Person.CreditCardNumbers = cards; }
-        protected void SetAge(Int32 age = 0) { Person.Age = age; }
-        protected void SetPhones(String[]? phones = null) { Person.Phones = phones;}
-        protected void SetBirthDate(Int64 birthDate = 0) { Person.BirthDate = birthDate;}
-        protected void SetSalary(Double salary = 0) { Person.Salary = salary; }
-        protected void SetIsMarred(Boolean isMarried = false) { Person.IsMarred = isMarried; }
-        protected void SetGender(Gender gender = Gender.Male) { Person.Gender = gender; }
-        protected void SetChildren(Child[]? children = null) { Person.Children = children; }
+        protected virtual void SetSequenceId(Int32 id = 0) { Person.SequenceId = id; }
+        protected virtual void SetCreditCardNumbers(String[]? cards = null) { Person.CreditCardNumbers = cards; }
+        protected virtual void SetPhones(String[]? phones = null) { Person.Phones = phones;}
+        protected virtual void SetSalary(Double salary = 0) { Person.Salary = salary; }
+        protected virtual void SetIsMarried(Boolean isMarried = false) { Person.IsMarried = isMarried; }
+        protected virtual void SetChildren(Human[]? children = null) { Person.Children = children; }
     }
 
     public class RandomPersonBuilder: PersonBuilder
     {
-        
-        //Random rand = new Random();
-    
+
+
     }
 }
