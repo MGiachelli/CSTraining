@@ -11,30 +11,19 @@ namespace SerializationTask
         private Person? _person;
         private HumanBuilder? _humanBuilder;
 
+        public PersonBuilder(HumanBuilder humanBuilder)
+        {
+            _humanBuilder = humanBuilder ?? throw new ArgumentNullException(nameof(humanBuilder));
+        }
         public virtual Person Person 
         { 
             get { _person ??= new Person(); return _person; } 
             set { _person = value; }
         }
-        public virtual PersonBuilder SetPerson(Person? person = null)
-        {
-            this._person = person;
-            return this;
-        }
-        public virtual HumanBuilder HumanBuilder
-        {
-            get { _humanBuilder ??= new HumanBuilder(); return _humanBuilder; }
-            set { _humanBuilder = value; }
-        }
-        public virtual PersonBuilder SetHumanBuilder(HumanBuilder? humanBuilder = null)
-        {
-            this._humanBuilder = humanBuilder;
-            return this;
-        }
         public Person Build(Object? FromObject = null)
         {
-            this.HumanBuilder.Human = this.Person;
-            this.HumanBuilder.Build(FromObject);
+            _humanBuilder.Human = this.Person;
+            _humanBuilder.Build(FromObject);
 
             SetTransportId();
             SetSalary();
@@ -58,9 +47,10 @@ namespace SerializationTask
         protected virtual void SetChildren(Human[]? children = null) { Person.Children = children; }
     }
 
-    public class RandomPersonBuilder: PersonBuilder
+    public class RandomPersonBuilder : PersonBuilder
     {
-
-
+        public RandomPersonBuilder(HumanBuilder humanBuilder) : base(humanBuilder)
+        {
+        }
     }
 }
