@@ -11,18 +11,14 @@ namespace SerializationTask
         private Person? _person;
         private HumanBuilder? _humanBuilder;
 
-        public PersonBuilder(HumanBuilder humanBuilder)
+        public PersonBuilder(HumanBuilder? humanBuilder = null)
         {
-            _humanBuilder = humanBuilder ?? throw new ArgumentNullException(nameof(humanBuilder));
-        }
-        public virtual Person Person 
-        { 
-            get { _person ??= new Person(); return _person; } 
-            set { _person = value; }
+            _humanBuilder = humanBuilder ?? new HumanBuilder();
         }
         public Person Build(Object? FromObject = null)
         {
-            _humanBuilder.Human = this.Person;
+            _person = new Person();
+            _humanBuilder.Human = _person;
             _humanBuilder.Build(FromObject);
 
             SetTransportId();
@@ -31,25 +27,25 @@ namespace SerializationTask
             SetChildren();
             SetCreditCardNumbers();
             
-            return this.Person;
+            return _person;
         }
 
         protected virtual void SetTransportId(Guid? guid = null) 
         { 
-            if (guid == null) Person.TransportId = Guid.NewGuid();
-            else Person.TransportId = (Guid) guid; 
+            if (guid == null) _person.TransportId = Guid.NewGuid();
+            else _person.TransportId = (Guid) guid; 
         }
-        protected virtual void SetSequenceId(Int32 id = 0) { Person.SequenceId = id; }
-        protected virtual void SetCreditCardNumbers(String[]? cards = null) { Person.CreditCardNumbers = cards; }
-        protected virtual void SetPhones(String[]? phones = null) { Person.Phones = phones;}
-        protected virtual void SetSalary(Double salary = 0) { Person.Salary = salary; }
-        protected virtual void SetIsMarried(Boolean isMarried = false) { Person.IsMarried = isMarried; }
-        protected virtual void SetChildren(Human[]? children = null) { Person.Children = children; }
+        protected virtual void SetSequenceId(Int32 id = 0) { _person.SequenceId = id; }
+        protected virtual void SetCreditCardNumbers(String[]? cards = null) { _person.CreditCardNumbers = cards; }
+        protected virtual void SetPhones(String[]? phones = null) { _person.Phones = phones;}
+        protected virtual void SetSalary(Double salary = 0) { _person.Salary = salary; }
+        protected virtual void SetIsMarried(Boolean isMarried = false) { _person.IsMarried = isMarried; }
+        protected virtual void SetChildren(Human[]? children = null) { _person.Children = children; }
     }
 
     public class RandomPersonBuilder : PersonBuilder
     {
-        public RandomPersonBuilder(HumanBuilder humanBuilder) : base(humanBuilder)
+        public RandomPersonBuilder(HumanBuilder? humanBuilder = null) : base(new RandomHumanBuilder())
         {
         }
     }

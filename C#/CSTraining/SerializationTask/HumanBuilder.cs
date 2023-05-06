@@ -11,15 +11,16 @@ namespace SerializationTask
     public class HumanBuilder
     {
         private Human? _human;
+
+        public HumanBuilder(Human? human = null)
+        {
+            _human = human;
+        }
+
         public virtual Human Human
         {
             get { this._human ??= new Human(); return this._human; }
             set { this._human = value; }
-        }
-        public virtual HumanBuilder SetHuman(Human? human = null)
-        {
-            this._human = human;
-            return this;
         }
 
         public virtual Human Build(Object? FromObject = null)
@@ -50,13 +51,29 @@ namespace SerializationTask
 
         Random rand = new Random();
 
+        protected override void SetAge(int age = 0)
+        {
+            base.SetAge(rand.Next(0, 120));
+        }
+
+        protected override void SetBirthDate(long birthDate = 0)
+        {
+            base.SetBirthDate(birthDate);
+        }
+
         protected override void SetFirstName(String? name = null)
         {
-            this.Human.FirstName = FirstNames[rand.Next(FirstNames.Length)];
+            base.SetFirstName(FirstNames[rand.Next(FirstNames.Length)]);
         }
+
+        protected override void SetGender(Gender gender = Gender.Male)
+        {
+            base.SetGender((Gender) rand.Next(Enum.GetNames(typeof(Gender)).Length));
+        }
+
         protected override void SetLastName(String? name = null)
         {
-            this.Human.LastName = LastNames[rand.Next(LastNames.Length)];
+            base.SetLastName(LastNames[rand.Next(LastNames.Length)]);
         }
 
     }

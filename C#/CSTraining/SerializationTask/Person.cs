@@ -5,16 +5,11 @@ namespace SerializationTask
     {
         public Guid TransportId { get; set; }
         public Int32 SequenceId { get; set; }
-        public String[] CreditCardNumbers { get; set; }
-        public String[] Phones { get; set; }
+        public String[]? CreditCardNumbers { get; set; }
+        public String[]? Phones { get; set; }
         public Double Salary { get; set; }
         public Boolean IsMarried { get; set; }
-        public Human[] Children { get; set; }
-
-        internal Person()
-        {
-            //Console.WriteLine("Person created");
-        }
+        public Human[]? Children { get; set; }
 
         public override string? ToString()
         {
