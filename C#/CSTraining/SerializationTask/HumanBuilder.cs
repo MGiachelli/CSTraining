@@ -49,7 +49,7 @@ namespace SerializationTask
                 , "Martin", "Fowler", "Chris", "Beck", "Smith", "King", "Salomon", "Jordan", "Kent"
                 , "Gosling", "Brin", "Stone", "Archibald", "Manning", "Kernigan", "Ritchie", "Bruce" };
 
-        Random rand = new Random();
+        protected Random rand = new Random();
 
         protected override void SetAge(int age = 0)
         {
