@@ -8,8 +8,14 @@ namespace SerializationTask
 {
     public class PersonList : List<Person>
     {
-        public PersonList()
+        public PersonList(): base() 
         {
+            
+        }
+
+        public void Download()
+        {
+
         }
     }
 }

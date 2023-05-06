@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Security.Cryptography.X509Certificates;
+using System.Linq;
 
 namespace SerializationTask
 {
 	class Program
 	{
-		private const Int32 PERSON_NUM = 10;//000;
+		private const Int32 PERSON_NUM = 10000;
 		private static string exportFile = "Persons.json";
 		
         static void Main(string[] args)
@@ -64,7 +65,7 @@ namespace SerializationTask
 		public static List<Person> DeserializeFromJsonFile(string filePath)
 		{
 			Console.WriteLine("------------------------------------");
-			Console.WriteLine("Loading persons from file: " + filePath);
+			Console.WriteLine("Deserializing persons from file: " + filePath);
 
             return JsonSerializer.Deserialize<List<Person>>(File.ReadAllText(filePath)
 															, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
@@ -75,6 +76,13 @@ namespace SerializationTask
 		{
 			Console.WriteLine("------------------------------------");
 			Console.WriteLine("Persons count: " + personList.Count);
+			Console.WriteLine($"Persons credit card count: {personList.Sum(p => p.CreditCardNumbers == null ? 0 : p.CreditCardNumbers.Length)}" +
+				$"\taverage: {personList.Average(p => p.CreditCardNumbers == null ? 0 : p.CreditCardNumbers.Length)}");
+
+			Console.WriteLine($"Persons children count: {personList.Sum(p => p.Children == null ? 0 : p.Children.Length)}" +
+				$"\taverage: {personList.Average(p => p.Children == null ? 0 : p.Children.Length)}" +
+                "\taverage child age: " + personList.Sum(p => p.Children == null ? 0 : p.Children.Sum(c => c.Age))
+					/ personList.Sum(p => p.Children == null ? 1 : p.Children.Length));
 		}
     }
 }
