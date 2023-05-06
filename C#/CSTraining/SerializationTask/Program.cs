@@ -8,7 +8,7 @@ namespace SerializationTask
 {
 	class Program
 	{
-		private const Int32 PERSON_NUM = 20;//0;//00;
+		private const Int32 PERSON_NUM = 10;//000;
 		private static string exportFile = "Persons.json";
 		
         static void Main(string[] args)

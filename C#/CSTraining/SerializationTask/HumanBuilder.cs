@@ -58,6 +58,9 @@ namespace SerializationTask
 
         protected override void SetBirthDate(long birthDate = 0)
         {
+            var date = DateTime.Today.AddYears((this.Human.Age ?? 0) * -1);
+            date = date.AddDays(rand.Next(0, 365));
+            birthDate = (new DateTimeOffset(date)).ToUnixTimeMilliseconds();
             base.SetBirthDate(birthDate);
         }
 
