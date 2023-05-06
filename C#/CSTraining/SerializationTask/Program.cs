@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SerializationTask
 {
@@ -17,7 +18,7 @@ namespace SerializationTask
 			exportFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) +"\\" + exportFile;
             SerializeToJsonFile(personList, exportFile);
 			ClearPersonList(personList);
-			DeserializeFromJsonFile(personList, exportFile);
+            personList = DeserializeFromJsonFile(exportFile);
 			DisplayStatistics(personList);
         }
 
@@ -40,8 +41,16 @@ namespace SerializationTask
 		{
 			Console.WriteLine("------------------------------------");
 			Console.WriteLine("Serializing persons to file: " + filePath);
-			var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true };
-			File.WriteAllText(filePath, JsonSerializer.Serialize<List<Person>>(personList, options));
+			File.WriteAllText(filePath
+								,JsonSerializer.Serialize<List<Person>>
+									(personList
+									, new JsonSerializerOptions 
+										{ 
+											PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+											, WriteIndented = true 
+										}
+									)
+							 );
 			Console.WriteLine($"Serialized {personList.Count()} persons.");
 		}
 
@@ -52,13 +61,15 @@ namespace SerializationTask
 			personList.Clear();
 		}
 
-		public static void DeserializeFromJsonFile(List<Person> personList, string filePath)
+		public static List<Person> DeserializeFromJsonFile(string filePath)
 		{
 			Console.WriteLine("------------------------------------");
 			Console.WriteLine("Loading persons from file: " + filePath);
-			personList = JsonSerializer.Deserialize<List<Person>>(File.OpenRead(filePath));
-			Console.WriteLine("Persons loaded: " + personList.Count);
-		}
+
+            return JsonSerializer.Deserialize<List<Person>>(File.ReadAllText(filePath)
+															, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+															);
+        }
 
 		public static void DisplayStatistics(List<Person> personList)
 		{
