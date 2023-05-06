@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="PersonList.cs" />
     <Compile Remove="Program_BAD.cs" />
     <Compile Remove="Program_ERR.cs" />
   </ItemGroup>
