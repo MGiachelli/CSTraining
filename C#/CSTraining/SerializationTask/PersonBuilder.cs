@@ -1,9 +1,12 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using CreditCardNumberGenerator;
+using RandomPhoneNumberGenerator;
 
 namespace SerializationTask
 {
@@ -29,7 +32,8 @@ namespace SerializationTask
             SetIsMarried();
             SetChildren();
             SetCreditCardNumbers();
-            
+            SetPhones();
+
             return _person;
         }
 
@@ -62,6 +66,34 @@ namespace SerializationTask
                 randomChildren[c] = _humanBuilder.Human;
             }
             base.SetChildren(randomChildren);
+        }
+
+        protected override void SetCreditCardNumbers(string[]? cards = null)
+        {
+            var cardsList = rand.GetCreditCardNumbers(RandomCreditCardNumberGenerator.BuildPrefixAndLengthArrayForVisaMasterCardAmex()
+                                                      , rand.Next(0, Person.MAX_CARDS));
+
+            base.SetCreditCardNumbers(cardsList.ToArray<string>());
+        }
+
+        protected override void SetIsMarried(bool isMarried = false)
+        {
+            base.SetIsMarried(isMarried);
+        }
+
+        protected override void SetPhones(string[]? phones = null)
+        {
+            string[] randomPhones = new string[rand.Next(0, Person.MAX_PHONES)];
+            for (int p = 0; p < randomPhones.Length; p++)
+            {
+                randomPhones[p] = RandomPhoneNumberGenerator.RandomPhoneNumberGenerator.GenerateRandomPhoneNumber();
+            }
+            base.SetPhones(randomPhones);
+        }
+
+        protected override void SetSalary(double salary = 0)
+        {
+            base.SetSalary(salary);
         }
     }
 }
