@@ -10,16 +10,16 @@ namespace SerializationTask
 {
 	class Program
 	{
-		private const Int32 PERSON_NUM = 10000;
-		private static string exportFile = "Persons.json";
+		private const Int32 PERSON_NUM = 100;//00;
+		private const string exportFile = "Persons.json";
 		
         static void Main(string[] args)
         {
 			List<Person> personList = GeneratePersonsList(new RandomPersonBuilder(), PERSON_NUM);
-			exportFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) +"\\" + exportFile;
-            SerializeToJsonFile(personList, exportFile);
+			var exportPathAndFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) +"\\" + exportFile;
+            SerializeToJsonFile(personList, exportPathAndFile);
 			ClearPersonList(personList);
-            personList = DeserializeFromJsonFile(exportFile);
+            personList = DeserializeFromJsonFile(exportPathAndFile);
 			DisplayStatistics(personList);
         }
 
