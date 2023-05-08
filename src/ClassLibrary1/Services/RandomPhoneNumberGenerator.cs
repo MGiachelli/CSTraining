@@ -1,29 +1,27 @@
 ﻿using System.Text;
-using System.Security.Cryptography;
-using System;/*from   w ww . j  a v  a2s. c o  m*/
 
-namespace RandomPhoneNumberGenerator
+namespace ClassLibrary1.Services
 {
     public static class RandomPhoneNumberGenerator
     {
-        public static string GenerateRandomPhoneNumber()
+        public static String GenerateRandomPhoneNumber()
         {
-   
-            return string.Format("07{0}", GenerateRandomNumber(8));
+
+            return String.Format("07{0}", GenerateRandomNumber(8));
         }
         /// <summary>
         /// Create a random number as a string with a maximum length.
         /// </summary>
         /// <param name="length">Length of number</param>
         /// <returns>Generated string</returns>
-        public static string GenerateRandomNumber(int length)
+        public static String GenerateRandomNumber(Int32 length)
         {
             if (length > 0)
             {
                 var sb = new StringBuilder();
 
                 var rnd = SeedRandom();
-                for (int i = 0; i < length; i++)
+                for (var i = 0; i < length; i++)
                 {
                     sb.Append(rnd.Next(0, 9).ToString());
                 }
@@ -31,11 +29,11 @@ namespace RandomPhoneNumberGenerator
                 return sb.ToString();
             }
 
-            return string.Empty;
+            return String.Empty;
         }
         private static Random SeedRandom()
         {
             return new Random(Guid.NewGuid().GetHashCode());
-        }       
+        }
     }
 }

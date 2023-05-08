@@ -4,13 +4,21 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="PersonList.cs" />
     <Compile Remove="Program_BAD.cs" />
     <Compile Remove="Program_ERR.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Exceptions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary1\ClassLibrary1.csproj" />
   </ItemGroup>
 
 </Project>
