@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ClassLibrary1.Models.Exceptions;
 
-namespace CreditCardNumberGenerator
+namespace ClassLibrary1.Services
 {
     public static class RandomCreditCardNumberGenerator
     {
@@ -41,20 +39,20 @@ namespace CreditCardNumberGenerator
             var cardsList = random.GetCreditCardNumbers(RandomCreditCardNumberGenerator.BuildPrefixAndLengthArrayForVisaMasterCardAmex(), 10);
         */
 
-        public static string[] AMEX_PREFIX_LIST = new[] { "34", "37" };
+        public static String[] AMEX_PREFIX_LIST = new[] { "34", "37" };
 
 
-        public static string[] DINERS_PREFIX_LIST = new[]
+        public static String[] DINERS_PREFIX_LIST = new[]
                                                         {
                                                             "300",
                                                             "301", "302", "303", "36", "38"
                                                         };
 
 
-        public static string[] DISCOVER_PREFIX_LIST = new[] { "6011" };
+        public static String[] DISCOVER_PREFIX_LIST = new[] { "6011" };
 
 
-        public static string[] ENROUTE_PREFIX_LIST = new[]
+        public static String[] ENROUTE_PREFIX_LIST = new[]
                                                         {
                                                             "2014",
                                                             "2149"
@@ -66,7 +64,7 @@ namespace CreditCardNumberGenerator
                                                         };
 
 
-        public static string[] MASTERCARD_PREFIX_LIST = new[]
+        public static String[] MASTERCARD_PREFIX_LIST = new[]
                                                             {
                                                                 "51",
                                                                 "52", "53", "54", "55",
@@ -96,27 +94,27 @@ namespace CreditCardNumberGenerator
                                                             };
 
 
-        public static string[] VISA_PREFIX_LIST = new[]
+        public static String[] VISA_PREFIX_LIST = new[]
                                                     {
                                                         "4539",
                                                         "4556", "4916", "4532", "4929", "40240071", "4485", "4716", "4"
                                                     };
 
 
-        public static string[] VOYAGER_PREFIX_LIST = new[] { "8699" };
+        public static String[] VOYAGER_PREFIX_LIST = new[] { "8699" };
 
         public struct PrefixAndLength
         {
-            public PrefixAndLength(string prefix, int length)
+            public PrefixAndLength(String prefix, Int32 length)
             {
                 Prefix = prefix;
                 Length = length;
             }
-            public string Prefix { get; set; }
-            public int Length { get; set; }
+            public String Prefix { get; set; }
+            public Int32 Length { get; set; }
         }
 
-        public static IEnumerable<PrefixAndLength> BuildPrefixAndLengthList(string[] prefixList, int length)
+        public static IEnumerable<PrefixAndLength> BuildPrefixAndLengthList(String[] prefixList, Int32 length)
         {
             var list = from p in prefixList select new PrefixAndLength(p, length);
             return list;
@@ -139,23 +137,23 @@ namespace CreditCardNumberGenerator
         /// <param name="prefixAndLengthList"></param>
         /// <param name="howMany"></param>
         /// <returns></returns>
-        public static IEnumerable<string> GetCreditCardNumbers(PrefixAndLength[] prefixAndLengthList,
-                                                         int howMany)
+        public static IEnumerable<String> GetCreditCardNumbers(PrefixAndLength[] prefixAndLengthList,
+                                                         Int32 howMany)
         {
-            Random rndGen = new Random();
-            return GetCreditCardNumbers(rndGen, prefixAndLengthList, howMany);
+            var rndGen = new Random();
+            return rndGen.GetCreditCardNumbers(prefixAndLengthList, howMany);
         }
 
-        public static IEnumerable<string> GetCreditCardNumbers(this Random random, PrefixAndLength[] prefixAndLengthList, int howMany)
+        public static IEnumerable<String> GetCreditCardNumbers(this Random random, PrefixAndLength[] prefixAndLengthList, Int32 howMany)
         {
-            var result = new Stack<string>();
-            for (int i = 0; i < howMany; i++)
+            var result = new Stack<String>();
+            for (var i = 0; i < howMany; i++)
             {
-                int randomPrefix = random.Next(0, prefixAndLengthList.Length - 1);
+                var randomPrefix = random.Next(0, prefixAndLengthList.Length - 1);
 
                 var prefixAndLength = prefixAndLengthList[randomPrefix];
 
-                result.Push(CreateFakeCreditCardNumber(random, prefixAndLength.Prefix, prefixAndLength.Length));
+                result.Push(random.CreateFakeCreditCardNumber(prefixAndLength.Prefix, prefixAndLength.Length));
             }
 
             return result;
@@ -166,12 +164,12 @@ namespace CreditCardNumberGenerator
         private of digits   'length' is the length of the CC number to generate.
      * Typically 13 or  16
         */
-        private static string CreateFakeCreditCardNumber(this Random random, string prefix, int length)
+        private static String CreateFakeCreditCardNumber(this Random random, String prefix, Int32 length)
         {
-            string ccnumber = prefix;
-            while (ccnumber.Length < (length - 1))
+            var ccnumber = prefix;
+            while (ccnumber.Length < length - 1)
             {
-                double rnd = (random.NextDouble() * 1.0f - 0f);
+                var rnd = random.NextDouble() * 1.0f - 0f;
 
                 ccnumber += Math.Floor(rnd * 10);
             }
@@ -183,28 +181,28 @@ namespace CreditCardNumberGenerator
             var reversedCCnumberList = reversedCCnumberstring.Select(c => Convert.ToInt32(c.ToString()));
 
             // calculate sum //Luhn Algorithm http://en.wikipedia.org/wiki/Luhn_algorithm
-            int sum = 0;
-            int pos = 0;
-            int[] reversedCCnumber = reversedCCnumberList.ToArray();
+            var sum = 0;
+            var pos = 0;
+            var reversedCCnumber = reversedCCnumberList.ToArray();
 
             while (pos < length - 1)
             {
-                int odd = reversedCCnumber[pos] * 2;
+                var odd = reversedCCnumber[pos] * 2;
 
                 if (odd > 9)
                     odd -= 9;
 
                 sum += odd;
 
-                if (pos != (length - 2))
+                if (pos != length - 2)
                     sum += reversedCCnumber[pos + 1];
 
                 pos += 2;
             }
 
             // calculate check digit
-            int checkdigit =
-                Convert.ToInt32((Math.Floor((decimal)sum / 10) + 1) * 10 - sum) % 10;
+            var checkdigit =
+                Convert.ToInt32((Math.Floor((Decimal)sum / 10) + 1) * 10 - sum) % 10;
 
             ccnumber += checkdigit;
 
@@ -212,72 +210,86 @@ namespace CreditCardNumberGenerator
         }
 
 
-        public static IEnumerable<string> GetCreditCardNumbers(string[] prefixList, int length,
-                                                  int howMany)
+        public static IEnumerable<String> GetCreditCardNumbers(String[] prefixList, Int32 length,
+                                                  Int32 howMany)
         {
-            var result = new Stack<string>();
+            var result = new Stack<String>();
             var random = new Random();
-            for (int i = 0; i < howMany; i++)
+            for (var i = 0; i < howMany; i++)
             {
-                int randomPrefix = random.Next(0, prefixList.Length - 1);
+                var randomPrefix = random.Next(0, prefixList.Length - 1);
 
                 if (randomPrefix > 1)  //Why??, is it a bug ? it never will select last element
                 {
                     randomPrefix--;
                 }
 
-                string ccnumber = prefixList[randomPrefix];
+                var ccnumber = prefixList[randomPrefix];
 
-                result.Push(CreateFakeCreditCardNumber(random, ccnumber, length));
+                result.Push(random.CreateFakeCreditCardNumber(ccnumber, length));
             }
 
             return result;
         }
 
 
-        public static IEnumerable<string> GenerateMasterCardNumbers(int howMany)
+        public static IEnumerable<String> GenerateMasterCardNumbers(Int32 howMany)
         {
             return GetCreditCardNumbers(MASTERCARD_PREFIX_LIST, 16, howMany);
         }
 
 
-        public static string GenerateMasterCardNumber()
+        public static String GenerateMasterCardNumber()
         {
             return GetCreditCardNumbers(MASTERCARD_PREFIX_LIST, 16, 1).First();
         }
 
-        public static bool IsValidCreditCardNumber(string creditCardNumber)
+        public static Boolean IsValidCreditCardNumber(String creditCardNumber)
         {
             try
             {
                 var reversedNumber = creditCardNumber.ToCharArray().Reverse();
 
-                int mod10Count = 0;
-                for (int i = 0; i < reversedNumber.Count(); i++)
+                var mod10Count = 0;
+                for (var i = 0; i < reversedNumber.Count(); i++)
                 {
-                    int augend = Convert.ToInt32(reversedNumber.ElementAt(i).ToString());
+                    var augend = Convert.ToInt32(reversedNumber.ElementAt(i).ToString());
 
-                    if (((i + 1) % 2) == 0)
+                    if ((i + 1) % 2 == 0)
                     {
-                        string productstring = (augend * 2).ToString();
+                        var productstring = (augend * 2).ToString();
                         augend = 0;
-                        for (int j = 0; j < productstring.Length; j++)
+                        for (var j = 0; j < productstring.Length; j++)
                         {
                             augend += Convert.ToInt32(productstring.ElementAt(j).ToString());
                         }
                     }
+
                     mod10Count += augend;
                 }
 
-                if ((mod10Count % 10) == 0)
+                if (mod10Count % 10 == 0)
                 {
                     return true;
                 }
             }
-            catch
+            catch (LibraryMemoryException ex)
             {
-                return false;
+                // handle
             }
+            catch (OutOfMemoryException ex)
+            {
+                throw new LibraryException("Exception occurs in my library!", ex);
+            }
+            catch (Exception ex)
+            {
+                // base exception handling
+            }
+            finally
+            {
+
+            }
+
             return false;
         }
     }

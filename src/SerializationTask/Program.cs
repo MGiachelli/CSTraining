@@ -1,44 +1,44 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using System.Collections.Generic;
+﻿using SerializationTask.Models;
+using SerializationTask.Services;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Security.Cryptography.X509Certificates;
-using System.Linq;
 
 namespace SerializationTask
 {
-	class Program
+    class Program
 	{
-		private const Int32 PERSON_NUM = 100;//00;
-		private const string exportFile = "Persons.json";
+		private const Int32 PERSON_NUM = 10000;
+		private static String exportFileName = "Persons.json";
 		
-        static void Main(string[] args)
+
+        static void Main(String[] args)
         {
-			List<Person> personList = GeneratePersonsList(new RandomPersonBuilder(), PERSON_NUM);
-			var exportPathAndFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) +"\\" + exportFile;
-            SerializeToJsonFile(personList, exportPathAndFile);
+            var personList = GeneratePersonsList(new RandomPersonBuilder(), PERSON_NUM);
+            var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), exportFileName);
+
+            SerializeToJsonFile(personList, filePath);
 			ClearPersonList(personList);
-            personList = DeserializeFromJsonFile(exportPathAndFile);
+            personList = DeserializeFromJsonFile(exportFileName);
 			DisplayStatistics(personList);
         }
+
 
         public static List<Person> GeneratePersonsList(PersonBuilder personBuilder, Int32 personNum = 1)
 		{
 			Console.WriteLine("------------------------------------");
 			Console.WriteLine("Generating persons with " + personBuilder.GetType().Name);
             List<Person> list = new();
-            for (Int32 i = 0; i < personNum; i++)
+
+            for (var i = 0; i < personNum; i++)
 			{
-				Person person = personBuilder.Build();
+				var person = personBuilder.Build();
 				person.SequenceId = i;
 				list.Add(person);
 				Console.WriteLine(person.ToString());
-			};
+			}
+
 			return list;
 		}
-
-		public static void SerializeToJsonFile(List<Person> personList, string filePath)
+        public static void SerializeToJsonFile(List<Person> personList, String filePath)
 		{
 			Console.WriteLine("------------------------------------");
 			Console.WriteLine("Serializing persons to file: " + filePath);
@@ -54,15 +54,13 @@ namespace SerializationTask
 							 );
 			Console.WriteLine($"Serialized {personList.Count()} persons.");
 		}
-
-		public static void ClearPersonList(List<Person> personList)
+        public static void ClearPersonList(List<Person> personList)
 		{
 			Console.WriteLine("------------------------------------");
 			Console.WriteLine("Clearing person list...");
 			personList.Clear();
 		}
-
-		public static List<Person> DeserializeFromJsonFile(string filePath)
+        public static List<Person> DeserializeFromJsonFile(String filePath)
 		{
 			Console.WriteLine("------------------------------------");
 			Console.WriteLine("Deserializing persons from file: " + filePath);
@@ -71,8 +69,7 @@ namespace SerializationTask
 															, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
 															);
         }
-
-		public static void DisplayStatistics(List<Person> personList)
+        public static void DisplayStatistics(List<Person> personList)
 		{
 			Console.WriteLine("------------------------------------");
 			Console.WriteLine("Persons count: " + personList.Count);
@@ -83,6 +80,8 @@ namespace SerializationTask
 				$"\taverage: {personList.Average(p => p.Children == null ? 0 : p.Children.Length)}" +
                 "\taverage child age: " + personList.Sum(p => p.Children == null ? 0 : p.Children.Sum(c => c.Age))
 					/ personList.Sum(p => p.Children == null ? 1 : p.Children.Length));
-		}
+
+            Console.ReadKey();
+        }
     }
 }

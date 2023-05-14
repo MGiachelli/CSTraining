@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-using SerializationTask;
+﻿using SerializationTask.Models;
 
-namespace SerializationTask
+namespace SerializationTask.Services
 {
     public class HumanBuilder
     {
@@ -19,8 +13,8 @@ namespace SerializationTask
 
         public virtual Human Human
         {
-            get { this._human ??= new Human(); return this._human; }
-            set { this._human = value; }
+            get { _human ??= new Human(); return _human; }
+            set { _human = value; }
         }
 
         public virtual Human Build(Object? FromObject = null)
@@ -31,13 +25,13 @@ namespace SerializationTask
             SetGender();
             SetBirthDate();
 
-            return this.Human;
+            return Human;
         }
-        protected virtual void SetFirstName(String? name = null) { this.Human.FirstName = name; }
-        protected virtual void SetLastName(String? name = null) { this.Human.LastName = name; }
-        protected virtual void SetAge(Int32 age = 0) { this.Human.Age = age; }
-        protected virtual void SetBirthDate(Int64 birthDate = 0) { this.Human.BirthDate = birthDate; }
-        protected virtual void SetGender(Gender gender = Gender.Male) { this.Human.Gender = gender; }
+        protected virtual void SetFirstName(String? name = null) { Human.FirstName = name; }
+        protected virtual void SetLastName(String? name = null) { Human.LastName = name; }
+        protected virtual void SetAge(Int32 age = 0) { Human.Age = age; }
+        protected virtual void SetBirthDate(Int64 birthDate = 0) { Human.BirthDate = birthDate; }
+        protected virtual void SetGender(Gender gender = Gender.Male) { Human.Gender = gender; }
     }
 
     public class RandomHumanBuilder : HumanBuilder
@@ -51,14 +45,14 @@ namespace SerializationTask
 
         protected Random rand = new Random();
 
-        protected override void SetAge(int age = 0)
+        protected override void SetAge(Int32 age = 0)
         {
             base.SetAge(rand.Next(0, 120));
         }
 
-        protected override void SetBirthDate(long birthDate = 0)
+        protected override void SetBirthDate(Int64 birthDate = 0)
         {
-            var date = DateTime.Today.AddYears((this.Human.Age ?? 0) * -1);
+            var date = DateTime.Today.AddYears((Human.Age ?? 0) * -1);
             date = date.AddDays(rand.Next(0, 365));
             birthDate = (new DateTimeOffset(date)).ToUnixTimeMilliseconds();
             base.SetBirthDate(birthDate);
