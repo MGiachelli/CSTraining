@@ -13,7 +13,7 @@ namespace SerializationTask.Services
 
         public virtual Human Human
         {
-            get { _human ??= new Human(); return _human; }
+            get { return _human; }// _human ??= new Human(); return _human; }
             set { _human = value; }
         }
 

@@ -1,0 +1,29 @@
+1. что такое lifetime scope в контексте Autofac?
+2. что значит "from the container" в "resolve things right from the container."? «ачем это может понадобитьс€?
+3. если в контейнере зарегистрированы более одного класса с тем же интерфейсом, как указывать конкретный класс при Resolve? Ќапример, € зарегистрировал:
+            builder.RegisterType<PersonBuilder>().AsSelf();
+            builder.RegisterType<RandomPersonBuilder>().As<PersonBuilder>();
+ затем var personBuilder = scope.Resolve<PersonBuilder>();
+ при этом personBuilder создаетс€ как RandomPersonBuilder, но не пон€тно почему? » что если бы был другой билдер?
+4. что будет, если вместо:
+    using (var scope = Container.BeginLifetimeScope())
+      {
+        var writer = scope.Resolve<IDateWriter>();
+        ...
+      }
+
+      сделать (допустим writer реализует IDisposable):
+
+      using (var writer = Container.BeginLifetimeScope().Resolve<IDateWriter>())
+      {
+        ...
+      }
+5. јвторесолвинг работает, только если параметр зарегистрированного класса есть в сигнатуре метода, внутри тела метода не работает?
+6. ћожет ли Autofac ресолвить массив или коллекцию зарегистрированного типа? ≈сли да, то как задавать кол-во нужных объектов?
+    ex.: builder.RegisterType<Person>().As<Human>();
+    ..
+    protected override void SetChildren(Human[] children = null) // будет ресолвед?
+    {
+    ...
+    }
+7. ¬ообще ничего не пон€л про integration libraries (https://docs.autofac.org/en/latest/integration/netcore.html#quick-start)

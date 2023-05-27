@@ -11,7 +11,7 @@ namespace SerializationTask.Services
 
         public PersonBuilder(HumanBuilder humanBuilder = null)
         {
-            _humanBuilder = humanBuilder ?? new HumanBuilder();
+            _humanBuilder = humanBuilder;
         }
         public Person Build(Object FromObject = null)
         {
@@ -45,7 +45,7 @@ namespace SerializationTask.Services
     public class RandomPersonBuilder : PersonBuilder
     {
         protected Random rand = new Random();
-        public RandomPersonBuilder(HumanBuilder humanBuilder = null) : base(new RandomHumanBuilder())
+        public RandomPersonBuilder(HumanBuilder humanBuilder) : base(humanBuilder)
         {
         }
 

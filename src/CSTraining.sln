@@ -5,12 +5,13 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerializationTask", "SerializationTask\SerializationTask.csproj", "{2D630A16-FF56-45F8-950D-91D7A62326BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{BD7AE657-59F7-402D-A025-B5B59B68ECAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerializationLib", "ClassLibrary1\SerializationLib.csproj", "{BD7AE657-59F7-402D-A025-B5B59B68ECAB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E28F7384-7CB7-4C7C-AE9B-2DC0E6A0B6A5}"
 	ProjectSection(SolutionItems) = preProject
 		..\.gitignore = ..\.gitignore
 		..\Requirements\Serialization task.txt = ..\Requirements\Serialization task.txt
+		Q2.txt = Q2.txt
 	EndProjectSection
 EndProject
 Global

@@ -1,40 +1,59 @@
 ﻿using SerializationTask.Models;
 using SerializationTask.Services;
 using System.Text.Json;
+using Autofac;
 
 namespace SerializationTask
 {
     class Program
 	{
-		private const Int32 PERSON_NUM = 10000;
+		private const Int32 PERSON_NUM = 10;
 		private static String exportFileName = "Persons.json";
-		
+        private static IContainer Container { get; set; }
 
         static void Main(String[] args)
         {
-            var personList = GeneratePersonsList(new RandomPersonBuilder(), PERSON_NUM);
-            var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), exportFileName);
+			RegisterComponents();
 
-            SerializeToJsonFile(personList, filePath);
-			ClearPersonList(personList);
-            personList = DeserializeFromJsonFile(exportFileName);
-			DisplayStatistics(personList);
+            var personList = GeneratePersonsList(PERSON_NUM);
+   //         var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), exportFileName);
+
+   //         SerializeToJsonFile(personList, filePath);
+			//ClearPersonList(personList);
+   //         personList = DeserializeFromJsonFile(exportFileName);
+			//DisplayStatistics(personList);
         }
 
+        private static void RegisterComponents()
+        {
+			var builder = new ContainerBuilder();
+			builder.RegisterType<Human>().AsSelf();
+            builder.RegisterType<Person>().As<Human>();
+            builder.RegisterType<HumanBuilder>().AsSelf();
+            builder.RegisterType<PersonBuilder>().AsSelf();
+            builder.RegisterType<RandomHumanBuilder>().As<HumanBuilder>();
+            builder.RegisterType<RandomPersonBuilder>().As<PersonBuilder>();
+            Container = builder.Build();
+        }
 
-        public static List<Person> GeneratePersonsList(PersonBuilder personBuilder, Int32 personNum = 1)
+        public static List<Person> GeneratePersonsList(Int32 personNum = 1)
 		{
-			Console.WriteLine("------------------------------------");
-			Console.WriteLine("Generating persons with " + personBuilder.GetType().Name);
             List<Person> list = new();
 
-            for (var i = 0; i < personNum; i++)
-			{
-				var person = personBuilder.Build();
-				person.SequenceId = i;
-				list.Add(person);
-				Console.WriteLine(person.ToString());
-			}
+            using (var scope = Container.BeginLifetimeScope())
+            {
+                var personBuilder = scope.Resolve<PersonBuilder>();
+                Console.WriteLine("------------------------------------");
+                Console.WriteLine("Generating persons with " + personBuilder.GetType().Name);
+
+                for (var i = 0; i < personNum; i++)
+				{
+					var person = personBuilder.Build();
+					person.SequenceId = i;
+					list.Add(person);
+					Console.WriteLine(person.ToString());
+				}
+            }
 
 			return list;
 		}
