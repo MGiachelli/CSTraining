@@ -8,22 +8,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Exceptions\**" />
+    <EmbeddedResource Remove="Models\Exceptions\**" />
+    <None Remove="Models\Exceptions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="PersonList.cs" />
     <Compile Remove="Program_BAD.cs" />
     <Compile Remove="Program_ERR.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Exceptions\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\SerializationLib.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="7.0.1" />
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SerializationLib\SerializationLib.csproj" />
   </ItemGroup>
 
 </Project>

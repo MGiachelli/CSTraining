@@ -1,6 +1,6 @@
-﻿using ClassLibrary1.Models.Exceptions;
+﻿using SerializationLib.Models.Exceptions;
 
-namespace ClassLibrary1.Services
+namespace SerializationLib.Services
 {
     public static class RandomCreditCardNumberGenerator
     {

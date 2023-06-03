@@ -1,4 +1,4 @@
-﻿using ClassLibrary1.Services;
+﻿using SerializationLib.Services;
 using SerializationTask.Models;
 
 namespace SerializationTask.Services

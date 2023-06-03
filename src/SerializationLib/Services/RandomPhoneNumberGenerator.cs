@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace ClassLibrary1.Services
+namespace SerializationLib.Services
 {
     public static class RandomPhoneNumberGenerator
     {

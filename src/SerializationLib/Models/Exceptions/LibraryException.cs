@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ClassLibrary1.Models.Exceptions;
+namespace SerializationLib.Models.Exceptions;
 
 public class LibraryException : Exception
 {

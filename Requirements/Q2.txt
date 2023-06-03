@@ -1,5 +1,5 @@
 1. что такое lifetime scope в контексте Autofac?
-2. что значит "from the container" в "resolve things right from the container."? Зачем это может понадобиться?
+2. что значит "from the container" в "resolve things right from the container."? Зачем это может понадоб    иться?
 3. если в контейнере зарегистрированы более одного класса с тем же интерфейсом, как указывать конкретный класс при Resolve? Например, я зарегистрировал:
             builder.RegisterType<PersonBuilder>().AsSelf();
             builder.RegisterType<RandomPersonBuilder>().As<PersonBuilder>();
